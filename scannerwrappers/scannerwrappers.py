@@ -4,6 +4,12 @@ import subprocess
 class ScannerWraps:
 
     '''
+    The method [rungas] will run the GoASTScanner on the GO files in the path supplied
+    '''
+    def rungas(PATH_TO_CODE_TO_SCAN):
+        return False
+
+    '''
     The method [runsafesql] will be used to run safesql on the
     '''
 

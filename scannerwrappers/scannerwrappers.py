@@ -6,14 +6,14 @@ class ScannerWraps:
     '''
     The method [rungas] will run the GoASTScanner on the GO files in the path supplied
     '''
-    def rungas(PATH_TO_CODE_TO_SCAN):
+    def rungas(self, PATH_TO_CODE_TO_SCAN):
         return False
 
     '''
     The method [runsafesql] will be used to run safesql on the
     '''
 
-    def runsafesql(PATH_TO_CODE_TO_SCAN):
+    def runsafesql(self, PATH_TO_CODE_TO_SCAN):
 
         safesql_success_message = "You're safe from SQL injection! Yay \o/"
         starry_line="***************"

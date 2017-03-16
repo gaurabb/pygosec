@@ -9,6 +9,10 @@ Following static analyzers will be covered:
 1. [**safesql**](https://github.com/stripe/safesql)
 2.  [**GOASTScanner**](https://github.com/GoASTScanner/gas)
 
+### Prerequisites
+1. [GO must be installed](https://golang.org/doc/install)
+2. [GOPATH Environment variable must be defined](https://github.com/golang/go/wiki/GOPATH) 
+
 ### Usage
 ```
 Usage: python gochecker.py -p <path to code to scan> <options>

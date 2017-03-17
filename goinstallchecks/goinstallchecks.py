@@ -44,7 +44,6 @@ class GoInstallChecks:
     def getGOPATH(self):
         try:
             go_path = os.environ["GOPATH"]
-            print(Log_Messages["gopath_value"].format(go_path))
             return go_path
         except:
             return Log_Messages["gopath_not_set"]

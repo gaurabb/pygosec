@@ -18,8 +18,6 @@ Following static analyzers will be covered:
 Usage: python gochecker.py -p <path to code to scan> <options>
           Options:
             -h=Display help/usage
-            -gp=Custom GOPATH. If not provided, GOPATH environment 
-            variable value is used
 ```
 
 ### Example

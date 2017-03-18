@@ -127,9 +127,10 @@ def main():
                     path_to_code_to_scan = a
 
 
-            ## Assign GOPATH environment variable value to GOPATH variable
-            GOPATH = objgopathchecker.getGOPATH()
-            os.chdir(GOPATH)
+
+            GOPATH = objgopathchecker.getGOPATH() # Assign GOPATH environment variable value to GOPATH variable
+            os.chdir(GOPATH) # For [GoAStScan] change the CWD to GOPATH
+
             # Check for installed scanner packages
             if not ChkInstalledScanners(GOPATH):
                 print("INFO: None of the required scanner packages are not installed. Exit")

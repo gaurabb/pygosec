@@ -17,7 +17,7 @@ class GoInstallChecks:
     '''
     Check the current version of GO installed
     '''
-    def checkGoVersion(self):
+    def checkgoversion(self):
         try:
             go_version = subprocess.check_output(["go", "version"]).decode("utf-8")
             print(Log_Messages["go_installed"].format(go_version))
@@ -33,7 +33,7 @@ class GoInstallChecks:
             return False
 
 
-    def checkForGOPATH(self):
+    def checkforgopath(self):
         try:
             go_path = os.environ["GOPATH"]
             print(Log_Messages["gopath_value"].format(go_path))
@@ -41,7 +41,7 @@ class GoInstallChecks:
         except:
             return False
 
-    def getGOPATH(self):
+    def getgopath(self):
         try:
             go_path = os.environ["GOPATH"]
             return go_path

@@ -39,7 +39,6 @@ MESSAGES = {
 
 def ChkInstalledScanners(GOPATH):
 
-
     try:
         installed_packages = subprocess.check_output([GO_CMD, GO_PACKAGE_LIST_CMD, "..."]).decode("utf-8")
 
@@ -95,12 +94,22 @@ def displayusage():
 
 def main():
 
-    PATH_TO_CODE_TO_SCAN = ""
+    path_to_code_to_scan = ""
 
-    # Check for command line arguments
+    objgochecker = GoInstallChecks()
+    objgopathchecker = GoInstallChecks()
+
+    # Check for command line arguments, display usage if not provided
     if len(sys.argv[1:]) < 1:
         # Path to code t scan is not provided so display usage and exit
         displayusage()
+        return
+    elif objgochecker.checkGoVersion() is False:
+            print("\nERROR: GO installation is not found. GO is required for these scanners to work. \nPlease install GO "
+                  "and try again")
+            return
+    elif objgopathchecker.checkForGOPATH() == False:
+        print("\nERROR: GOPATH environment variable is NOT set and is required.\nPlease set GOPATH and try again\n\r")
         return
     else:
         try:
@@ -111,43 +120,30 @@ def main():
                     return
                 elif o == "-p":
                     if not a:
-                        print("\nWARNING: No code files provided to scan. The script will exit.\n\n")
+                        print("\nWARNING: Path to code to scan is not provided. The script will exit.\n")
                         return
-                    print("\nINFO: Directory that will be scanned: {0}".format(a))
-                    PATH_TO_CODE_TO_SCAN = a
-                    #PATH_TO_CODE_TO_SCAN = "github.com/testweb"  ## Move to Config
-                else:
-                    assert False, "ERROR: Unhandled option provided."
+                    print("\nINFO: Directory to be scanned: {0}".format(a))
 
-            # Step 1: Check if GO is installed. If not show an error and return
-            #  If GO is installed the proceed to next steps
+                    path_to_code_to_scan = a
 
-            objgochecker = GoInstallChecks()
-            if objgochecker.checkGoVersion() is False:
-                print("INFO: The script will now exit. Please review the messages above to troubleshoot.")
-                return
 
-            # Step 2: Check if GOPATH is set. If not set, print message and return
-            objgopathchecker = GoInstallChecks()
-            if objgopathchecker.checkForGOPATH() == False:
-                print("ERROR: GOPATH environment variable is NOT set and is required.\nThe script will exit\n\r")
-                return
+            ## Assign GOPATH environment variable value to GOPATH variable
             GOPATH = objgopathchecker.getGOPATH()
-
-            # Step 3: Check for installed scanner packages
+            os.chdir(GOPATH)
+            # Check for installed scanner packages
             if not ChkInstalledScanners(GOPATH):
                 print("INFO: None of the required scanner packages are not installed. Exit")
                 return
 
-            # Step 4: Run the scanners, 1 at a time
+            # Iterate through installed scanners and run against the code directory
             objscannerwraps = ScannerWraps()
             for scanner in DICT_SCANNERS:
                 if scanner == "safesql" and DICT_SCANNERS[scanner] == 1:
-                    objscannerwraps.runsafesql(PATH_TO_CODE_TO_SCAN)
+                    objscannerwraps.runsafesql(path_to_code_to_scan)
                 elif scanner == "gas" and DICT_SCANNERS[scanner] == 1:
-                    objscannerwraps.rungas(PATH_TO_CODE_TO_SCAN)
+                    objscannerwraps.rungas("/src/"+path_to_code_to_scan)
         except getopt.GetoptError as err:
-            print("ERROR: Error processing command line arguments:\n\t {0}".format(str(err)))
+            print("ERROR: Following error processing command line arguments:    [{0}]. The script will exit.\n".format(str(err)))
 
 
 if __name__ == "__main__":

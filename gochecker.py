@@ -1,4 +1,5 @@
 import sys
+import os
 import getopt
 import subprocess
 from scannerwrappers.scannerwrappers import ScannerWraps
@@ -93,11 +94,14 @@ def displayusage():
 
 
 def main():
+
     PATH_TO_CODE_TO_SCAN = ""
+
     # Check for command line arguments
     if len(sys.argv[1:]) < 1:
-        # Display usage
+        # Path to code t scan is not provided so display usage and exit
         displayusage()
+        return
     else:
         try:
             opts, args = getopt.getopt(sys.argv[1:], "p:h")
@@ -106,18 +110,18 @@ def main():
                     displayusage()
                     return
                 elif o == "-p":
+                    if not a:
+                        print("\nWARNING: No code files provided to scan. The script will exit.\n\n")
+                        return
+                    print("\nINFO: Directory that will be scanned: {0}".format(a))
                     PATH_TO_CODE_TO_SCAN = a
+                    #PATH_TO_CODE_TO_SCAN = "github.com/testweb"  ## Move to Config
                 else:
-                    assert False, "ERROR: Unhandled option detected."
-
-            # Validate that the argument values are valid
-            if not PATH_TO_CODE_TO_SCAN:
-                ##print("\nWARNING: No code to scan. The script will exit.\n\n")
-                ##return
-                PATH_TO_CODE_TO_SCAN = "github.com/testweb"  ## Move to Config
+                    assert False, "ERROR: Unhandled option provided."
 
             # Step 1: Check if GO is installed. If not show an error and return
             #  If GO is installed the proceed to next steps
+
             objgochecker = GoInstallChecks()
             if objgochecker.checkGoVersion() is False:
                 print("INFO: The script will now exit. Please review the messages above to troubleshoot.")

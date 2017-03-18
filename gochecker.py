@@ -15,10 +15,6 @@ GO_CMD = "/usr/local/bin/go"
 
 GO_PACKAGE_LIST_CMD = "list"
 
-SCANNER_INSTALLATION_INSTRUCTIONS = {"safesql": "https://github.com/stripe/safesql",
-                                     "gas": "https://github.com/GoASTScanner/gas",
-                                     "safesql": "github.com/stripe/safesql"
-                                     }
 INSTALL_OPTIONS = ['y', 'yes']
 
 MESSAGES = {

@@ -3,12 +3,12 @@ import subprocess
 import os
 
 SCAN_LOG_MESSAGES={
-    "safesql_start_message" : "\nINFO:Running [safesql]...",
+    "safesql_start_message" : "\nINFO: Running [safesql]...",
     "safesql_success_message" : "You're safe from SQL injection! Yay \o/",
     "safe_sql_no_issues" : "INFO: NO ISSUES DETECTED during [safesql] scan for GO project at: {0}",
     "safe_sql_issues_detected" : "\nISSUES DETECTED during [safesql] scan for GO project at: {0}",
     "safe_sql_run_error" : "ERROR: [safesql] exit with an error code {0} and following message \n{1}",
-    "gas_start_message" : "\nINFO:Running [GoASTScanner]...",
+    "gas_start_message" : "\nINFO: Running [GoASTScanner]...",
     "gas_success_message" : "*****Write******",
     "gas_sql_no_issues" : "INFO: NO ISSUES DETECTED during [GoASTScanner] scan for GO project at : {0}",
     "gas_sql_run_error" : "ERROR: [GoASTScanner] exit with an error code {0} and following message \n{1}",

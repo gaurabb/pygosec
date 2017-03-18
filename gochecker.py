@@ -24,7 +24,7 @@ INSTALL_OPTIONS = ['y', 'yes']
 MESSAGES = {
     "unable_to_check_installed_pkgs": "ERROR: Unable check for installed packages.",
 
-    "found_installed_packages": "INFO:Found installed packages. Checking for the security static analyzers... ",
+    "found_installed_packages": "INFO: Found installed packages. Checking for the security static analyzers... ",
 
     "unavailable_pkg": "WARNING: [{0}] package is not installed.\n\rINFO: This can be installed from {1}",
 

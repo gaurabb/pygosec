@@ -2,16 +2,17 @@
 Python wrapper for GO static analyzers
 
 ## Description
-Create a python wrapper for various GO static analyzers and obtain the 
-results in one place.
+Create a python wrapper for various GO security static analyzers and 
+obtain the results in one place.
 
-Following static analyzers will be covered:
+Following static analyzers are run:
 1. [**safesql**](https://github.com/stripe/safesql)
-2.  [**GOASTScanner**](https://github.com/GoASTScanner/gas)
+2. [**GOASTScanner**](https://github.com/GoASTScanner/gas)
 
 ### Prerequisites
 1. [GO must be installed](https://golang.org/doc/install)
 2. [GOPATH Environment variable must be defined](https://github.com/golang/go/wiki/GOPATH) 
+3. MAC and Linux machines only
 
 ### Usage
 ```
@@ -46,3 +47,8 @@ INFO: Scan results written to: /path/to/GO/Workspace/src/github.com/testweb
 INFO: Running [safesql]...
 INFO: Processing the results...
 INFO: NO ISSUES DETECTED during [safesql] scan for GO project at: github.com/testweb
+```
+
+### Notes
+* GoASTScanner results are written to a json file in the CWD
+* SafeSQL results are shown on the terminal only

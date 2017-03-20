@@ -23,10 +23,10 @@ class ScannerWraps:
 
     def rungas(self, path_to_code_to_scan):
 
-        resultsfile = "goastscan.json"  # The file where GoAST Scan results will be written to
-
         wd = os.getcwd() + path_to_code_to_scan
         os.chdir(wd)
+
+        resultsfile = "goastscan.json"  # The file where GoAST Scan results will be written to
 
         try:
             print(scan_log_messages["gas_start_message"])

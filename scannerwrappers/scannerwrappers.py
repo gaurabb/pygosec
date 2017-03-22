@@ -38,12 +38,12 @@ class ScannerWraps:
 
             gas_return_code = gas_run.wait()
             gas_result = gas_run.stdout.read().decode("utf-8")
-            if gas_return_code:
+            if gas_return_code>=0:
                 if gas_result.strip() == scan_log_messages["gas_success_message"]:
                     print(scan_log_messages["gas_sql_no_issues"].format(path_to_code_to_scan))
                 else:
                     print(scan_log_messages["gas_sql_issues_detected"].format(path_to_code_to_scan))
-                    print(("INFO: Scan results written to: {0}/{1}".format(wd, resultsfile)))
+                print(("INFO: Scan results written to: {0}/{1}".format(wd, resultsfile)))
             else:
                 print(scan_log_messages["gas_sql_run_error"].format(gas_return_code, gas_result))
         except Exception as err:

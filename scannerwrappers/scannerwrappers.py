@@ -9,7 +9,7 @@ scan_log_messages = {
     "safe_sql_issues_detected": "\nISSUES DETECTED during [safesql] scan for GO project at: {0}",
     "safe_sql_run_error": "ERROR: [safesql] exit with an error code {0} and following message \n{1}",
     "gas_start_message": "\nINFO: Running [GoASTScanner]...",
-    "gas_success_message": "*****Write******",
+    ## "gas_success_message": "*****Write******", ## Redundant
     "gas_sql_no_issues": "INFO: NO ISSUES DETECTED during [GoASTScanner] scan for GO project at : {0}",
     "gas_sql_run_error": "ERROR: [GoASTScanner] exit with an error code {0} and following message \n{1}",
     "gas_sql_issues_detected": "INFO: ISSUES DETECTED during [GoASTScanner] scan for GO project at : {0}"
@@ -26,7 +26,7 @@ class ScannerWraps:
         wd = os.getcwd() + path_to_code_to_scan
         os.chdir(wd)
 
-        resultsfile = "goastscan.json"  # The file where GoAST Scan results will be written to
+        resultsfile = "RESULT_GoAST_SCAN.json"  # The file where GoAST Scan results will be written to
 
         try:
             print(scan_log_messages["gas_start_message"])
@@ -39,10 +39,6 @@ class ScannerWraps:
             gas_return_code = gas_run.wait()
             gas_result = gas_run.stdout.read().decode("utf-8")
             if gas_return_code>=0:
-                if gas_result.strip() == scan_log_messages["gas_success_message"]:
-                    print(scan_log_messages["gas_sql_no_issues"].format(path_to_code_to_scan))
-                else:
-                    print(scan_log_messages["gas_sql_issues_detected"].format(path_to_code_to_scan))
                 print(("INFO: Scan results written to: {0}/{1}".format(wd, resultsfile)))
             else:
                 print(scan_log_messages["gas_sql_run_error"].format(gas_return_code, gas_result))

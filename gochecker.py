@@ -12,7 +12,8 @@ scanners = {
     "gas": 0
 }
 
-go_command = "/usr/local/bin/go"
+## go_command = "/usr/local/bin/go"
+go_command = "go"
 
 go_list_pkg_cmd = "list"
 

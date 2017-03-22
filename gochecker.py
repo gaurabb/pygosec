@@ -6,6 +6,7 @@ from scannerwrappers.scannerwrappers import ScannerWraps
 from goinstallchecks.goinstallchecks import GoInstallChecks
 from installscanners.installscanners import InstallGOScanners
 
+
 scanners = {
     "safesql": 0,
     "gas": 0

@@ -17,19 +17,24 @@ scan_log_messages = {
 
 class ScannerWraps:
 
-    """ScannerWraps
-    The method [rungas] will run the GoASTScanner on the GO files in the path supplied
-    """
 
-    def rungas(self, path_to_code_to_scan):
-
-        wd = os.getcwd() + path_to_code_to_scan
+    def rungas(self, path_to_code_to_scan, curr_gopath):
+        '''
+        ScannerWraps The method [rungas] will run the GoASTScanner on the GO files in the path supplied
+        :param path_to_code_to_scan:
+        :return:
+        '''
+        print(scan_log_messages["gas_start_message"])
+        ## Check if path_to_code_scan exists
+        ## before trying chdir
+        wd = os.path.join(curr_gopath,"src/",path_to_code_to_scan)
+        if not ScannerWraps.checkforvaliddirectory(wd.strip()):
+            return False
         os.chdir(wd)
 
         resultsfile = "RESULT_GoAST_SCAN.json"  # The file where GoAST Scan results will be written to
 
         try:
-            print(scan_log_messages["gas_start_message"])
             gas_run = subprocess.Popen(["gas", "-fmt=json", "-out="+ resultsfile, "./..."],
                                        cwd= os.getcwd(),
                                        stdout=subprocess.PIPE,
@@ -42,21 +47,26 @@ class ScannerWraps:
                 print(("INFO: Scan results written to: {0}/{1}".format(wd, resultsfile)))
             else:
                 print(scan_log_messages["gas_sql_run_error"].format(gas_return_code, gas_result))
+            return True
         except Exception as err:
             print(str(err))
             return False
 
 
 
-    def runsafesql(self, path_to_code_to_scan):
-
-        ''' The method [runsafesql] will be used to run safesql on the code files in path_to_code_to_scan
+    def runsafesql(self, path_to_code_to_scan, curr_gopath):
 
         '''
-
-
+        The method [runsafesql] will be used to run safesql on the code files in path_to_code_to_scan
+        :param path_to_code_to_scan:
+        :return True/False:
+        '''
+        print(scan_log_messages["safesql_start_message"])
         try:
-            print(scan_log_messages["safesql_start_message"])
+            wd = os.path.join(curr_gopath,"src/",path_to_code_to_scan)
+            if not ScannerWraps.checkforvaliddirectory(wd.strip()):
+                return False
+
             safesql_run = subprocess.Popen(["safesql", path_to_code_to_scan], stdout=subprocess.PIPE,
                                            stderr=subprocess.STDOUT)
             print("INFO: Processing the results...")
@@ -72,3 +82,15 @@ class ScannerWraps:
                 print(scan_log_messages["safe_sql_run_error"].format(safesql_return_code,safesql_result))
         except:
             raise
+
+
+    def checkforvaliddirectory(path_to_code_to_scan):
+        '''
+        Check if the directory to scan provided exists or not
+        :param path_to_code_to_scan:
+        :return True/False:
+        '''
+        if not os.path.isdir(path_to_code_to_scan):
+            print("\nERROR: The path to scan is not a valid directory: {0}".format(path_to_code_to_scan))
+            return False
+        return True

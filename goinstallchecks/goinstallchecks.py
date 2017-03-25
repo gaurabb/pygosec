@@ -2,7 +2,8 @@ import subprocess
 import os
 
 Log_Messages={
-    "go_installed":"\nINFO:Installed GO version: {0}",
+    "gopath_resource":"https://github.com/golang/go/wiki/GOPATH",
+    "go_installed": "\nINFO:Installed GO version: {0}",
     "unknown_go_installation_error": "ERROR: Either a valid GO installation in not detected or there was some issue "
                                      "with the available installation. The script will now exit.",
     "go_not_installed":"ERROR:GO is not installed. Install GO and try again.",
@@ -13,11 +14,11 @@ Log_Messages={
 
 class GoInstallChecks:
 
-
-    '''
-    Check the current version of GO installed
-    '''
     def checkgoversion(self):
+        '''
+        Check the current version of GO installed
+        :return True/False:
+        '''
         try:
             go_version = subprocess.check_output(["go", "version"]).decode("utf-8")
             print(Log_Messages["go_installed"].format(go_version))
@@ -34,12 +35,33 @@ class GoInstallChecks:
 
 
     def checkforgopath(self):
+        '''
+        Check if the GOPATH environment variable is set
+        :return True/False:
+        '''
         try:
-            go_path = os.environ["GOPATH"]
-            print(Log_Messages["gopath_value"].format(go_path))
-            return True
-        except:
+            if "GOPATH" in os.environ:
+                go_path = os.environ["GOPATH"]
+                print(Log_Messages["gopath_value"].format(go_path))
+                return True
+            else:
+                # Check if the user will want to have the GOPATH set
+                # If yes: give the option to type in the GOPATH
+                # If not provided, exit
+                usr_gopath=str(input("\nPlease enter the GOPATH value: "))
+                if not usr_gopath or not os.path.isdir(usr_gopath):
+                    print("\nERROR: The input value is not a valid GOPATH.\nINFO: "
+                          "Review GOPATH information here: {0}".format(Log_Messages["gopath_resource"]))
+                    return False
+                else:
+                    # Set the GOPATH environment variable
+                    os.environ["GOPATH"] = usr_gopath
+                    print(Log_Messages["gopath_value"].format(usr_gopath))
+                    return True
+        except Exception:
+            print("\nThe error is an error while checking for GOPATH. Error is:")
             return False
+
 
     def getgopath(self):
         try:

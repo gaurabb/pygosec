@@ -36,13 +36,13 @@ scanner_install_instructions = {
                                 "gas": "https://github.com/GoASTScanner/gas/"
                                 }
 
-''' chkinstalledscanners() will check if the scanners are installed in the machine where this wrapper is running.
-
-'''
-
 
 def chkinstalledscanners(gopath):
-
+    '''
+    chkinstalledscanners() will check if the scanners are installed in the machine where this wrapper is running.
+    :param gopath:
+    :return:
+    '''
     try:
         installed_packages = subprocess.check_output([go_command, go_list_pkg_cmd, "..."]).decode("utf-8")
 
@@ -85,34 +85,37 @@ def chkinstalledscanners(gopath):
         raise
 
 
-'''
-usage(): Displays usage of the pygostaticscanwrapper.py
-'''
-
 
 def displayusage():
+    '''
+    usage(): Displays usage of the pygostaticscanwrapper.py
+    :return:
+    '''
     print("GO Static Scan Wrapper in Python")
     print("Usage: gochecker.py -p <path to code to scan> <options>\r\n"
-          "Options:\r\n-h=Display help/usage")
+          "Options:\r\n-h=Display help/usage\n"
+          "Note: The path to scan has to be relative to GOPATH for GoASTScanner to work.")
 
 
 def main():
 
     path_to_code_to_scan = ""
 
-    objgochecker = GoInstallChecks()
-    objgopathchecker = GoInstallChecks()
+    ## Create an object of the class that has methods f
+    ## or GO installation checks
+    objgochecks = GoInstallChecks()
 
-    # Check for command line arguments, display usage if not provided
+    ## Check for command line arguments, display usage if not provided
+    ## return
     if len(sys.argv[1:]) < 1:
         # Path to code t scan is not provided so display usage and exit
         displayusage()
         return
-    elif objgochecker.checkgoversion() is False:
+    elif objgochecks.checkgoversion() is False:
             print("\nERROR: GO installation is not found. GO is required for these scanners to work. \nPlease install GO "
                   "and try again")
             return
-    elif objgopathchecker.checkforgopath() is False:
+    elif objgochecks.checkforgopath() is False:
         print("\nERROR: gopath environment variable is NOT set and is required.\nPlease set gopath and try again\n\r")
         return
     else:
@@ -130,8 +133,8 @@ def main():
 
                     path_to_code_to_scan = a
 
-            gopath = objgopathchecker.getgopath() # Assign gopath environment variable value to gopath variable
-            os.chdir(gopath) # For [GoAStScan] change the CWD to gopath
+            gopath = objgochecks.getgopath() # Assign gopath environment variable value to gopath variable
+            ##  os.chdir(gopath) # For [GoAStScan] change the CWD to gopath
 
             # Check for installed scanner packages
             if not chkinstalledscanners(gopath):
@@ -142,11 +145,17 @@ def main():
             objscannerwraps = ScannerWraps()
             for scanner in scanners:
                 if scanner == "safesql" and scanners[scanner] == 1:
-                    objscannerwraps.runsafesql(path_to_code_to_scan)
+                    if not objscannerwraps.runsafesql(path_to_code_to_scan, gopath):
+                        print("\nINFO: Either there is an error executing the scanner or the directory to scan does not"
+                              "exist. This script will now exit. \nINFO: Check the messages above to find the root cause")
+                        return
                 elif scanner == "gas" and scanners[scanner] == 1:
-                    objscannerwraps.rungas("/src/"+path_to_code_to_scan)
+                    if not objscannerwraps.rungas(path_to_code_to_scan, gopath):
+                        print("\nINFO: Either there is an error executing the scanner or the directory to scan does not"
+                              "exist. This script will now exit. \nINFO: Check the messages above to find the root cause")
+                        return
         except getopt.GetoptError as err:
-            print("ERROR: Following error processing command line arguments:    [{0}]. The script will exit.\n".format(str(err)))
+            print("ERROR: Following error processing command line arguments: [{0}]. The script will exit.\n".format(str(err)))
 
 
 if __name__ == "__main__":

@@ -14,9 +14,16 @@ Following static analyzers are run:
 2. [GOPATH Environment variable must be defined](https://github.com/golang/go/wiki/GOPATH) 
 3. MAC and Linux machines only
 
+### Install
+```
+1. git clone git@github.com:gaurabb/pygosec.git
+2. CD into the **pygosec** directory
+3. gochecker.py -p <path to code to scan> 
+```
+
 ### Usage
 ```
-Usage: python gochecker.py -p <path to code to scan> <options>
+Usage: python gochecker.py -p <path to code to scan>
           Options:
             -h=Display help/usage
 ```

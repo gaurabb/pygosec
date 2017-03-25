@@ -40,7 +40,7 @@ class GoInstallChecks:
         :return True/False:
         '''
         try:
-            if "GOPATH" in os.environ:
+            if "GOPATH" in os.environ and os.environ["GOPATH"]:
                 go_path = os.environ["GOPATH"]
                 print(Log_Messages["gopath_value"].format(go_path))
                 return True
@@ -48,16 +48,22 @@ class GoInstallChecks:
                 # Check if the user will want to have the GOPATH set
                 # If yes: give the option to type in the GOPATH
                 # If not provided, exit
-                usr_gopath=str(input("\nPlease enter the GOPATH value: "))
-                if not usr_gopath or not os.path.isdir(usr_gopath):
-                    print("\nERROR: The input value is not a valid GOPATH.\nINFO: "
-                          "Review GOPATH information here: {0}".format(Log_Messages["gopath_resource"]))
-                    return False
+                set_gopath = input("\nINFO: GOPATH is not set. Would you like to set GOPATH: y/n?")
+                if(set_gopath in {'y','yes','YES', 'Y'}):
+                    usr_gopath=str(input("\nPlease enter the GOPATH value: "))
+                    if not usr_gopath or not os.path.isdir(usr_gopath):
+                        print("\nERROR: The input value is not a valid GOPATH.\nINFO: "
+                              "Review GOPATH information here: {0}".format(Log_Messages["gopath_resource"]))
+                        return False
+                    else:
+                        # Set the GOPATH environment variable
+                        os.environ["GOPATH"] = usr_gopath
+                        print(Log_Messages["gopath_value"].format(usr_gopath))
+                        return True
                 else:
-                    # Set the GOPATH environment variable
-                    os.environ["GOPATH"] = usr_gopath
-                    print(Log_Messages["gopath_value"].format(usr_gopath))
-                    return True
+                    print("\nERROR: The GOPATH. is not set\nINFO: "
+                              "Review GOPATH information here: {0}".format(Log_Messages["gopath_resource"]))
+                    return False
         except Exception:
             print("\nThe error is an error while checking for GOPATH. Error is:")
             return False
